@@ -1,7 +1,7 @@
 format_version: 10
 pipelines:
   master-ami:
-    group: defaultGroup
+    group: Terraform
     materials:
       git-da613e5:
         git: https://github.com/PrakharDevOpsLearning/Golden-AMI.git
@@ -10,17 +10,9 @@ pipelines:
         branch: main
     secure_variables:
       TF_VAR_vault_token: AES:f4ovgEOXsjAAp61j7h2fJQ==:kgBExEvigsJ/x3jp7LV65fz9OU/9GbFyMF8RBsa+NUw=
+
     stages:
-      - master-ami:
-          fetch_materials: true
-          approval:
-            type: manual
-          jobs:
-            terraform-apply:
-              tasks:
-                - exec: {command: terraform, arguments: [ "init"], run_if: passed}
-                - exec: {command: terraform, arguments: [ "apply", "-auto-approve" ], run_if: passed}
-      - master-ami1:
+      - CREATE:
           fetch_materials: true
           environment_variables:
             env: dev
@@ -29,4 +21,18 @@ pipelines:
           jobs:
             terraform-apply:
               tasks:
+                - exec: {command: terraform, arguments: [ "init"], run_if: passed}
+                - exec: {command: terraform, arguments: [ "apply", "-auto-approve" ], run_if: passed}
+
+      - DELETE:
+          fetch_materials: true
+          environment_variables:
+            env: dev
+          approval:
+            type: manual
+          jobs:
+            terraform-apply:
+              tasks:
+                - exec: {command: terraform, arguments: [ "init"], run_if: passed}
+                - exec: {command: terraform, arguments: [ "state", "rm", "aws_ami_from_instance.ami" ], run_if: passed}     # to remove the state of ami image so that pipeline will not destroy image along with resource (instance)
                 - exec: {command: terraform, arguments: [ "destroy", "-auto-approve" ], run_if: passed}
