@@ -22,7 +22,7 @@ pipelines:
               tasks:
                 - exec: {command: terraform, arguments: [ "init"], run_if: passed}
                 - exec: {command: terraform, arguments: [ "apply", "-auto-approve" ], run_if: passed}
-      - master-ami:
+      - master-ami1:
           fetch_materials: true
           environment_variables:
             env: dev
