@@ -20,7 +20,7 @@ pipelines:
           jobs:
             terraform-apply:
               tasks:
-                - exec: {command: terraform, arguments: [ "init", "-backend-config=state.tfvars" ], run_if: passed}
+                - exec: {command: terraform, arguments: [ "init"], run_if: passed}
                 - exec: {command: terraform, arguments: [ "apply", "-auto-approve" ], run_if: passed}
       - master-ami:
           fetch_materials: true
