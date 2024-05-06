@@ -4,7 +4,7 @@ pipelines:
     group: defaultGroup
     materials:
       git-da613e5:
-        git: https://github.com/PrakharDevOpsLearning/master-ami.git
+        git: https://github.com/PrakharDevOpsLearning/Golden-AMI.git
         shallow_clone: false
         auto_update: true
         branch: main
